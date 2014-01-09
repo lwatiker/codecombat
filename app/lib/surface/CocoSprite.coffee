@@ -151,6 +151,9 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
 
   updatePosition: ->
     return unless @thang?.pos and @options.camera?
+    x = 1
+    if @thang.isCollectable
+      @thang.pos.z = @thang.pos.z + (Math.sin @ticker /  2.5 ) * .1 * 2
     if @thang.bobHeight                        
       @thang.pos.z = @thang.pos.z + (Math.sin @ticker /  @thang.bobTime) * 0.1 * @thang.bobHeight
     [p0, p1] = [@lastPos, @thang.pos]

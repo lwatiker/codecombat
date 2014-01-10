@@ -152,8 +152,8 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
   updatePosition: ->
     return unless @thang?.pos and @options.camera?
     x = 1
-    if @thang.isCollectable
-      @thang.pos.z = @thang.pos.z + (Math.sin @ticker /  2.5 ) * .1 * 2
+    # if @thang.type == "Tharin"
+    console.log(thang)
     if @thang.bobHeight                        
       @thang.pos.z = @thang.pos.z + (Math.sin @ticker /  @thang.bobTime) * 0.1 * @thang.bobHeight
     [p0, p1] = [@lastPos, @thang.pos]
@@ -368,11 +368,15 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
 
   addLabel: (name, style) ->
     @labels[name] ?= new Label sprite: @, camera: @options.camera, layer: @options.textLayer, style: style
-    @labels[name]
+    @labels[name] 
 
   addMark: (name, layer, thangType=null) ->
     @marks[name] ?= new Mark name: name, sprite: @, camera: @options.camera, layer: layer ? @options.groundLayer, thangType: thangType
     @marks[name]
+
+  addPickup: (name, layer) ->
+    @pickups[name] ?= new Pickup sprite: @, camera: @options.camera, layer: @options.textLayer
+    @pickups[name]
 
   notifySpeechUpdated: (e) ->
     e = _.clone(e)
@@ -401,6 +405,11 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
   setNameLabel: (name) ->
     label = @addLabel 'name', Label.STYLE_NAME
     label.setText name
+
+  itemPickup: (name, item) ->
+    pickup = @addPickup 'name'
+    pickup.setPickup name
+
 
   updateLabels: ->
     return unless @thang

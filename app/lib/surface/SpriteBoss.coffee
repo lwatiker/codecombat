@@ -214,7 +214,7 @@ module.exports = class SpriteBoss extends CocoClass
     sprite = if e.sprite?.thang?.isSelectable then e.sprite else null
     @selectSprite e, sprite
 
-  onStageMouseDown: (e) ->
+  onStageMouseDown: (e)F ->
     return if key.shift and @options.choosing
     @selectSprite e if e.onBackground
 

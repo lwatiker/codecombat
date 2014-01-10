@@ -1,7 +1,7 @@
 CocoClass = require 'lib/CocoClass'
 
-module.exports = class Label extends CocoClass
-  @STYLE_DIALOGUE = "dialogue"  # A speech bubble from a script
+module.exports = class Pickup extends CocoClass
+  @ITEM = "thaing"  # A speech bubble from a script
   @STYLE_SAY = "say"  # A piece of text generated from the world
   @STYLE_NAME = "name"  # A name like Scott set up for the Wizard
   # We might want to combine 'say' and 'name'; they're very similar
@@ -27,50 +27,50 @@ module.exports = class Label extends CocoClass
 
   toString: -> "<Label for #{@sprite?.thang?.id ? 'None'}: #{@text?.substring(0, 10) ? ''}>"
 
-  setText: (text) ->
+  setPickup: (text) ->
     # Returns whether an update was actually performed
-    return false if text is @text  
-    @text = text
+    return false if pickup is @pickup
+    @pickup = pickup
     @build()
     true
 
   build: ->
     @layer.removeChild @background if @background
     @layer.removeChild @label if @label
-    return unless @text  # null or '' should both be skipped
+    return unless @pickup  # null or '' should both be skipped
     o = @buildLabelOptions()
     @layer.addChild @label = @buildLabel o
     @layer.addChild @background = @buildBackground o
     @layer.updateLayerOrder()
 
   update: ->
-    return unless @text
-    offset = @sprite.getOffset? (if @style is 'dialogue' then 'mouth' else 'aboveHead')
+    return unless @pickup
+    offset = @sprite.getOffset('aboveHead')
     offset ?= x: 0, y: 0  # temp (if not CocoSprite)
     @label.x = @background.x = @sprite.displayObject.x + offset.x
     @label.y = @background.y = @sprite.displayObject.y + offset.y
     null
 
-  buildLabelOptions: ->
+  buildPickupOptions: ->
     o = {}
-    st = {dialogue: 'D', say: 'S', name: 'N'}[@style]
-    o.marginX = {D: 5, S: 2, N: 3}[st]
-    o.marginY = {D: 6, S: 2, N: 3}[st]
-    o.shadow = {D: false, S: true, N: true}[st]
-    o.fontSize = {D: 25, S: 19, N: 14}[st]
-    fontFamily = {D: "Arial", S: "Arial", N: "Arial"}[st]
+    st = {item: 'I', name: 'N'}[@style]
+    o.marginX = {I: 5, N: 3}[st]
+    o.marginY = {I: 6, N: 3}[st]
+    o.shadow = {D: false, N: true}[st]
+    o.fontSize = {D: 25, N: 14}[st]
+    fontFamily = {D: "Arial", N: "Arial"}[st]
     o.fontDescriptor = "#{o.fontSize}px #{fontFamily}"
-    o.fontColor = {D: "#000", S: "#000", N: "#00a"}[st]
-    o.backgroundFillColor = {D: "white", S: "rgba(255, 255, 255, 0.2)", N: "rgba(255, 255, 255, 0.5)"}[st]
-    o.backgroundStrokeColor = {D: "black", S: "rgba(0, 0, 0, 0.2)", N: "rgba(0, 0, 0, 0.0)"}[st]
-    o.backgroundStrokeStyle = {D: 2, S: 1, N: 1}[st]
-    o.backgroundBorderRadius = {D: 10, S: 5, N: 3}[st]
-    o.layerPriority = {D: 10, S: 5, N: 5}[st]
-    maxWidth = {D: 300, S: 300, N: 180}[st]
+    o.fontColor = {D: "#000", N: "#00a"}[st]
+    o.backgroundFillColor = {D: "white", N: "rgba(255, 255, 255, 0.5)"}[st]
+    o.backgroundStrokeColor = {D: "black", N: "rgba(0, 0, 0, 0.0)"}[st]
+    o.backgroundStrokeStyle = {D: 2, N: 1}[st]
+    o.backgroundBorderRadius = {D: 10, N: 3}[st]
+    o.layerPriority = {D: 10, N: 5}[st]
+    maxWidth = {D: 300, N: 180}[st]
     maxWidth = Math.max @camera.canvasWidth / 2 - 100, maxWidth  # Does this do anything?
-    maxLength = {D: 100, S: 100, N: 30}[st]
-    multiline = @addNewLinesToText _.string.prune(@text, maxLength), o.fontDescriptor, maxWidth
-    o.text = multiline.text
+    maxLength = {D: 100, N: 30}[st]
+    # multiline = @addNewLinesToText _.string.prune(@text, maxLength), o.fontDescriptor, maxWidth
+    o.text = "YOLO"
     o.textWidth = multiline.textWidth
     o
 

@@ -1,9 +1,9 @@
 CocoClass = require 'lib/CocoClass'
 
 module.exports = class Pickup extends CocoClass
-  @ITEM = "thaing"  # A speech bubble from a script
-  @STYLE_SAY = "say"  # A piece of text generated from the world
-  @STYLE_NAME = "name"  # A name like Scott set up for the Wizard
+  # @ITEM = "thaing"  # A speech bubble from a script
+  # @STYLE_SAY = "say"  # A piece of text generated from the world
+  # @STYLE_NAME = "name"  # A name like Scott set up for the Wizard
   # We might want to combine 'say' and 'name'; they're very similar
   # Nick designed 'say' based off of Scott's 'name' back when they were using two systems
 
@@ -15,7 +15,6 @@ module.exports = class Pickup extends CocoClass
     @sprite = options.sprite
     @camera = options.camera
     @layer = options.layer
-    @style = options.style ? Label.STYLE_SAY
     console.error @toString(), "needs a sprite." unless @sprite
     console.error @toString(), "needs a camera." unless @camera
     console.error @toString(), "needs a layer." unless @layer

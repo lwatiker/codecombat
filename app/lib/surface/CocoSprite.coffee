@@ -143,6 +143,7 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
     @updateStats()
     @updateMarks()
     @updateLabels()
+    @updatePickup()
 
   cache: ->
     bounds = @imageObject.getBounds()
@@ -152,8 +153,8 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
   updatePosition: ->
     return unless @thang?.pos and @options.camera?
     x = 1
-    # if @thang.type == "Tharin"
-    console.log(thang)
+    # if @thang.id == "Tharin"
+    #   # console.log(@thang)
     if @thang.bobHeight                        
       @thang.pos.z = @thang.pos.z + (Math.sin @ticker /  @thang.bobTime) * 0.1 * @thang.bobHeight
     [p0, p1] = [@lastPos, @thang.pos]
@@ -291,6 +292,16 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
       healthOffset = @getOffset 'aboveHead'
       [bar.x, bar.y] = [healthOffset.x - bar.width / 2, healthOffset.y]
 
+  updatePickup: ->
+    return unless @thang.inventory
+    return if @thang.inventory.length is @thang.lastInvLength
+    console.log("OMG I triggered a pickup animation!")
+    console.log(@thang)
+    @thang.lastInvLength = @thang.inventory.length
+    @addPickup
+
+
+
   configureMouse: ->
     @displayObject.cursor = 'pointer' if @thang?.isSelectable
     @displayObject.mouseEnabled = @displayObject.mouseChildren = false unless @thang?.isSelectable or @thang?.isLand
@@ -374,7 +385,7 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
     @marks[name] ?= new Mark name: name, sprite: @, camera: @options.camera, layer: layer ? @options.groundLayer, thangType: thangType
     @marks[name]
 
-  addPickup: (name, layer) ->
+  addPickup: () ->
     @pickups[name] ?= new Pickup sprite: @, camera: @options.camera, layer: @options.textLayer
     @pickups[name]
 
@@ -405,10 +416,6 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
   setNameLabel: (name) ->
     label = @addLabel 'name', Label.STYLE_NAME
     label.setText name
-
-  itemPickup: (name, item) ->
-    pickup = @addPickup 'name'
-    pickup.setPickup name
 
 
   updateLabels: ->

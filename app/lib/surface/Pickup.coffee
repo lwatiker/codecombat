@@ -45,8 +45,9 @@ module.exports = class Pickup extends CocoClass
     @layer.updateLayerOrder()
 
   update: ->
-    console.log("Updatin.")
+    
     return unless @pickup
+    console.log("Updatin.")
     offset = @sprite.getOffset('aboveHead')
     offset ?= x: 0, y: 0  # temp (if not CocoSprite)
     @pickup.x = @background.x = @sprite.displayObject.x + offset.x
@@ -71,7 +72,7 @@ module.exports = class Pickup extends CocoClass
     maxWidth = {D: 300, N: 180}[st]
     maxWidth = Math.max @camera.canvasWidth / 2 - 100, maxWidth  # Does this do anything?
     maxLength = {D: 100, N: 30}[st]
-    multiline = @addNewLinesToText _.string.prune(@text, maxLength), o.fontDescriptor, maxWidth
+    multiline = @addNewLinesToText o.fontDescriptor, maxWidth
     o.text = multiline.text
     o.textWidth = o.text.textWidth
     o
@@ -112,9 +113,11 @@ module.exports = class Pickup extends CocoClass
     background.layerPriority = o.layerPriority - 1
     background
 
-  addNewLinesToText: (originalText, fontDescriptor, maxWidth=400) ->
+  addNewLinesToText: ( fontDescriptor, maxWidth=400) ->
     rows = []
     row = []
+
+    originalText = "yolo"
     words = _.string.words originalText
     textWidth = 0
     for word in words

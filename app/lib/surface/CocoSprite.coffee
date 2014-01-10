@@ -71,6 +71,7 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
     super()
     mark.destroy() for name, mark of @marks
     label.destroy() for name, label of @labels
+    pickup.destory() for pickup of @pickups
 
   toString: -> "<CocoSprite: #{@thang?.id}>"
 
@@ -299,9 +300,10 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
     console.log("OMG I triggered a pickup animation!")
     console.log(@thang)
     @thang.lastInvLength = @thang.inventory.length
-    pickup_new = new Pickup sprite: @, camera: @options.camera, layer: @options.textLayer
-    pickup_new.setPickup()
-    pickup_new.update()
+    @addPickup
+    @pickup_new = new Pickup sprite: @, camera: @options.camera, layer: @options.textLayer
+    @pickup_new.setPickup()
+    @pickup_new.update()
 
     
 

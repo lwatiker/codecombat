@@ -4,6 +4,7 @@ SpriteBuilder = require 'lib/sprites/SpriteBuilder'
 Camera = require './Camera'
 Mark = require './Mark'
 Label = require './Label'
+Pickup = require './Pickup'
 AudioPlayer = require 'lib/AudioPlayer'
 
 # We'll get rid of this once level's teams actually have colors
@@ -298,7 +299,11 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
     console.log("OMG I triggered a pickup animation!")
     console.log(@thang)
     @thang.lastInvLength = @thang.inventory.length
-    @addPickup
+    pickup_new = new Pickup sprite: @, camera: @options.camera, layer: @options.textLayer
+    pickup_new.setPickup()
+    pickup_new.update()
+
+    
 
 
 
@@ -386,6 +391,7 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
     @marks[name]
 
   addPickup: () ->
+    console.log("adding a new pickup")
     @pickups[name] ?= new Pickup sprite: @, camera: @options.camera, layer: @options.textLayer
     @pickups[name]
 

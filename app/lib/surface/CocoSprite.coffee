@@ -4,7 +4,6 @@ SpriteBuilder = require 'lib/sprites/SpriteBuilder'
 Camera = require './Camera'
 Mark = require './Mark'
 Label = require './Label'
-Pickup = require './Pickup'
 AudioPlayer = require 'lib/AudioPlayer'
 
 # We'll get rid of this once level's teams actually have colors
@@ -71,7 +70,6 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
     super()
     mark.destroy() for name, mark of @marks
     label.destroy() for name, label of @labels
-    pickup.destory() for pickup of @pickups
 
   toString: -> "<CocoSprite: #{@thang?.id}>"
 
@@ -145,7 +143,6 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
     @updateStats()
     @updateMarks()
     @updateLabels()
-    @updatePickup()
 
   cache: ->
     bounds = @imageObject.getBounds()
@@ -154,9 +151,6 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
 
   updatePosition: ->
     return unless @thang?.pos and @options.camera?
-    x = 1
-    # if @thang.id == "Tharin"
-    #   # console.log(@thang)
     if @thang.bobHeight                        
       @thang.pos.z = @thang.pos.z + (Math.sin @ticker /  @thang.bobTime) * 0.1 * @thang.bobHeight
     [p0, p1] = [@lastPos, @thang.pos]
@@ -294,21 +288,6 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
       healthOffset = @getOffset 'aboveHead'
       [bar.x, bar.y] = [healthOffset.x - bar.width / 2, healthOffset.y]
 
-  updatePickup: ->
-    return unless @thang.inventory
-    return if @thang.inventory.length is @thang.lastInvLength
-    console.log("OMG I triggered a pickup animation!")
-    console.log(@thang)
-    @thang.lastInvLength = @thang.inventory.length
-    @addPickup
-    @pickup_new = new Pickup sprite: @, camera: @options.camera, layer: @options.textLayer
-    @pickup_new.setPickup()
-    @pickup_new.update()
-
-    
-
-
-
   configureMouse: ->
     @displayObject.cursor = 'pointer' if @thang?.isSelectable
     @displayObject.mouseEnabled = @displayObject.mouseChildren = false unless @thang?.isSelectable or @thang?.isLand
@@ -386,16 +365,11 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
 
   addLabel: (name, style) ->
     @labels[name] ?= new Label sprite: @, camera: @options.camera, layer: @options.textLayer, style: style
-    @labels[name] 
+    @labels[name]
 
   addMark: (name, layer, thangType=null) ->
     @marks[name] ?= new Mark name: name, sprite: @, camera: @options.camera, layer: layer ? @options.groundLayer, thangType: thangType
     @marks[name]
-
-  addPickup: () ->
-    console.log("adding a new pickup")
-    @pickups[name] ?= new Pickup sprite: @, camera: @options.camera, layer: @options.textLayer
-    @pickups[name]
 
   notifySpeechUpdated: (e) ->
     e = _.clone(e)
@@ -424,7 +398,6 @@ module.exports = CocoSprite = class CocoSprite extends CocoClass
   setNameLabel: (name) ->
     label = @addLabel 'name', Label.STYLE_NAME
     label.setText name
-
 
   updateLabels: ->
     return unless @thang

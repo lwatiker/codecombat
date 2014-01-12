@@ -29,7 +29,7 @@ module.exports = class Label extends CocoClass
 
   setText: (text) ->
     # Returns whether an update was actually performed
-    return false if text is @text  
+    return false if text is @text
     @text = text
     @build()
     true

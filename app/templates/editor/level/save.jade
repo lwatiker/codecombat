@@ -1,6 +1,6 @@
 extends /templates/modal/save_version
 
-block content
+block modal-body-content
   h3= "Level: " + level.get('name') + " - " + (levelNeedsSave ? "Modified" : "Not Modified")
   if levelNeedsSave
     form#save-level-form.form-horizontal

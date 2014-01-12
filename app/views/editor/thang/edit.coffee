@@ -8,6 +8,8 @@ Camera = require 'lib/surface/Camera'
 ThangComponentEditView = require 'views/editor/components/main'
 DocumentFiles = require 'collections/DocumentFiles'
 
+ColorsTabView = require './colors_tab_view'
+
 CENTER = {x:200, y:300}
 
 module.exports = class ThangTypeEditView extends View
@@ -66,6 +68,7 @@ module.exports = class ThangTypeEditView extends View
     @buildTreema()
     @initSliders()
     @initComponents()
+    @insertSubView(new ColorsTabView(@thangType))
 
   initComponents: =>
     options =
@@ -166,7 +169,7 @@ module.exports = class ThangTypeEditView extends View
     @file = e.target.files[0]
     return unless @file
     return unless @file.type is 'text/javascript'
-    @$el.find('#upload-button').prop('disabled', true)
+#    @$el.find('#upload-button').prop('disabled', true)
     @reader = new FileReader()
     @reader.onload = @onFileLoad
     @reader.readAsText(@file)
@@ -243,13 +246,6 @@ module.exports = class ThangTypeEditView extends View
 
   # sliders
 
-  initSlider: ($el, startValue, changeCallback) ->
-    slider = $el.slider({ animate: "fast" })
-    slider.slider('value', startValue)
-    slider.on('slide',changeCallback)
-    slider.on('slidechange',changeCallback)
-    slider
-
   initSliders: ->
     @rotationSlider = @initSlider $("#rotation-slider", @$el), 50, @updateRotation
     @scaleSlider = @initSlider $('#scale-slider', @$el), 29, @updateScale
@@ -301,7 +297,7 @@ module.exports = class ThangTypeEditView extends View
 
     res.success =>
       url = "/editor/thang/#{newThangType.get('slug') or newThangType.id}"
-      newThangType.uploadGenericPortrait =>
+      newThangType.uploadGenericPortrait ->
         document.location.href = url
 
   clearRawData: ->

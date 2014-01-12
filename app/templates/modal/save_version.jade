@@ -1,18 +1,24 @@
-.modal-header
-  h3 Save
-.modal-body
-  block content
-    form.form-horizontal
-      .control-group
-        label.control-label(for="commitMessage") Commit Message
-        .controls
-          textarea#commit-message.input-large(name="commitMessage", type="text")
-      .control-group
-        label.control-label(for="level-version-is-major") New Major Version
-        .controls
-          input#major-version.input-large(name="version-is-major", type="checkbox")
-          span.help-block
-.modal-footer
+extends /templates/modal/modal_base
+
+block modal-header-content
+  h3(data-i18n="save.save_version_title") Save New Version
+
+block modal-body-content
+  form.form-horizontal
+    .control-group
+      label.control-label(for="commitMessage") Commit Message
+      .controls
+        textarea#commit-message.input-large(name="commitMessage", type="text")
+    .control-group
+      label.control-label(for="level-version-is-major") New Major Version
+      .controls
+        input#major-version.input-large(name="version-is-major", type="checkbox")
+        span.help-block
+
+block modal-body-wait-content
+  h3 Saving...
+
+block modal-footer-content
   #accept-cla-wrapper.alert.alert-info
     | To save changes, first you must agree to  
     strong#cla-link our CLA
@@ -21,7 +27,3 @@
     
   button.btn(data-dismiss="modal") Cancel
   button.btn.btn-primary#save-version-button Save
-.modal-body.wait.hide
-  h3 Saving...
-  .progress.progress-striped.active
-    .bar

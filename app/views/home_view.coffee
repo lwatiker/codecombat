@@ -37,10 +37,18 @@ module.exports = class HomeView extends View
   initCanvas: =>
     @stage = new createjs.Stage($('#beginner-campaign canvas', @$el)[0])
     @createWizard -10, 2, 2.6
-    @turnOnStageUpdates()
 
   turnOnStageUpdates: ->
+    clearInterval @turnOff
     @interval = setInterval(@updateStage, 40) unless @interval
+
+  turnOffStageUpdates: ->
+    turnOffFunc = =>
+      clearInterval @interval
+      clearInterval @turnOff
+      @interval = null
+      @turnOff = null
+    @turnOff = setInterval turnOffFunc, 2000
 
   createWizard: (x=0, y=0, scale=1.0) ->
     spriteOptions = thangID: "Beginner Wizard", resolutionFactor: scale
@@ -54,10 +62,12 @@ module.exports = class HomeView extends View
     @stage.update()
 
   onMouseOverButton: ->
-    @wizardSprite.queueAction 'cast'
+    @turnOnStageUpdates()
+    @wizardSprite?.queueAction 'cast'
 
   onMouseOutButton: ->
-    @wizardSprite.queueAction 'idle'
+    @turnOffStageUpdates()
+    @wizardSprite?.queueAction 'idle'
 
   updateStage: =>
     @stage.update()
